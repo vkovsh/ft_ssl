@@ -1,10 +1,10 @@
 #include "ft_ssl.h"
 
-t_md5				ft_md5hash(char *msg)
+t_container				ft_md5hash(char *msg)
 {
-	t_md5			md;
-	void			*chunk;
-	size_t			i;
+	t_container			md;
+	void				*chunk;
+	size_t				i;
 
 	initialize_md_vars(&md);
 	md.padded_msg = create_padded_msg(msg,
@@ -15,7 +15,7 @@ t_md5				ft_md5hash(char *msg)
 	while (i < md.padded_msg_len)
 	{
 		ft_memmove(chunk, md.padded_msg + i, 64);
-		proceed_chunk(&md, chunk);
+		proceed_chunk_md5(&md, chunk);
 		i += 64;
 	}
 	return (md);			

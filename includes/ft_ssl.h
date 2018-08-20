@@ -11,7 +11,8 @@
 # define HASH_TYPES {"MD5", "SHA256"}
 
 extern unsigned char s_vars[S_LEN + 1];
-extern unsigned int	k_vars[K_LEN];
+extern unsigned int	k_vars_md[K_LEN];
+extern unsigned int	k_vars_sha[K_LEN];
 
 typedef enum		e_mdvar
 {
@@ -22,6 +23,19 @@ typedef enum		e_mdvar
 	MD_VAR_TOTAL
 }					t_mdvar;
 
+typedef enum		e_shavar
+{
+	H_ZERO,
+	H_ONE,
+	H_TWO,
+	H_THREE,
+	H_FOUR,
+	H_FIVE,
+	H_SIX,
+	H_SEVEN,
+	SHA_VAR_TOTAL
+}					t_shavar;
+
 typedef enum		e_hashtype
 {
 	HASH_MD_FIVE,
@@ -29,20 +43,25 @@ typedef enum		e_hashtype
 	HASH_TOTAL
 }					t_hashtype;
 
-typedef struct		s_md5
+typedef struct		s_container
 {
-	unsigned int	mdvars[MD_VAR_TOTAL];
+	unsigned int	*vars;
 	void			*padded_msg;
 	size_t			padded_msg_len;
-}					t_md5;
+}					t_container;
 
-void				initialize_md_vars(t_md5 *md);
+void				initialize_md_vars(t_container *md);
+void				initialize_sha_vars(t_container *sha);
 void				*create_padded_msg(void *msg,
 					size_t msg_len,
 					size_t *new_msg_len);
 unsigned int		get_m(unsigned char *chunk, int g);
-unsigned int		leftrotate(unsigned int x, int c);
-void				proceed_chunk(t_md5 *md,
+unsigned int		lrot(unsigned int x, int c);
+unsigned int		rrot(unsigned int x, int c);
+void				proceed_chunk_md5(t_container *md,
 					unsigned char *chunk);
-t_md5				ft_md5hash(char *msg);
+void				proceed_chunk_sha2(t_container *sha,
+					unsigned char *chunk);
+t_container			ft_md5hash(char *msg);
+t_container			ft_sha2hash(char *msg);
 #endif

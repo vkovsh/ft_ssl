@@ -16,10 +16,13 @@ INC					=	$(addprefix -I, $(INC_PATH))
 
 OBJ_NAME			=	$(SRC_NAME:.c=.o)
 
-SRC_NAME			=	main.c			\
-						utils.c			\
-						proceed_chunk.c	\
-						ft_md5hash.c
+SRC_NAME			=	main.c					\
+						utils.c					\
+						proceed_chunk_md5.c		\
+						proceed_chunk_sha2.c	\
+						ft_md5hash.c			\
+						ft_sha2hash.c			\
+						rotate.c
 
 all: $(NAME)
 
