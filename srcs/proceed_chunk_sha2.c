@@ -1,7 +1,7 @@
 #include "ft_ssl.h"
 
-void				init_word_array(unsigned char *chunk,
-					unsigned int *w)
+static void			init_word_array(uint8_t *chunk,
+					uint32_t *w)
 {
 	int				i;
 	int				s0;
@@ -9,53 +9,53 @@ void				init_word_array(unsigned char *chunk,
 
 	ft_memmove(w, chunk, 64);
 	i = 15;
+	for (int k = 0; k < 16; k++)
+		reverse_uint((uint8_t *)&w[k]);
 	while (++i < 64)
 	{
 		s0 = rrot(w[i - 15], 7) ^
 			rrot(w[i - 15], 18) ^
 			(w[i - 15] >> 3);
-		s1 = rrot(w[i -2], 17) ^
+		s1 = rrot(w[i - 2], 17) ^
 			rrot(w[i - 2], 19) ^
 			(w[i - 2] >> 10);
 		w[i] = w[i - 16] + s0 + w[i - 7] + s1;
 	}
 }
 
-void				init_sha_lvars(unsigned int *lvars,
+static void		init_sha_lvars(uint32_t *lvars,
 					t_container *sha)
 {
-	int				i;
-
-	i = -1;
-	while (++i < SHA_VAR_TOTAL)
-		lvars[i] = sha->vars[i];
+	ft_memmove(lvars, sha->vars,
+		sizeof(uint32_t) * SHA_VAR_TOTAL);
 }
 
-void				change_hash_value(t_container *sha,
-					unsigned int *lvars)
+static void		change_hash_value(uint32_t *sha,
+					uint32_t *lvars)
 {
 	int				i;
 
 	i = -1;
 	while (++i < SHA_VAR_TOTAL)
-		sha->vars[i] += lvars[i];
+		sha[i] += lvars[i];
 }
 
-void				compression_loop(unsigned int *lvars,
-					unsigned int *w)
+static void		compression_loop(uint32_t *lvars,
+					uint32_t *w)
 {
 	int				i;
-	unsigned int	t[6];
+	uint32_t	t[6];
 
 	i = -1;
 	while (++i < 64)
 	{
 		t[0] = rrot(lvars[H_FOUR], 6) ^
-		rrot(lvars[H_FOUR], 11) ^ rrot(lvars[H_FOUR], 25);
+			rrot(lvars[H_FOUR], 11) ^
+			rrot(lvars[H_FOUR], 25);
 		t[1] = (lvars[H_FOUR] & lvars[H_FIVE]) ^
-		((~lvars[H_FOUR]) & lvars[H_FIVE]) ^ lvars[H_SIX];
+			((~lvars[H_FOUR]) & lvars[H_SIX]);
 		t[2] = lvars[H_SEVEN] +
-			t[0] + t[1] + k_vars_sha[i] + w[i];
+			t[0] + t[1] + g_kvars_sha[i] + w[i];
 		t[3] = rrot(lvars[H_ZERO], 2) ^
 		rrot(lvars[H_ZERO], 13) ^ rrot(lvars[H_ZERO], 22);
 		t[4] = (lvars[H_ZERO] & lvars[H_ONE]) ^
@@ -74,13 +74,15 @@ void				compression_loop(unsigned int *lvars,
 }
 
 void				proceed_chunk_sha2(t_container *sha,
-					unsigned char *chunk)
+					uint8_t *chunk)
 {
-	unsigned int	w[64];
-	unsigned int	lvars[SHA_VAR_TOTAL];
+	uint32_t	w[64];
+	uint32_t	lvars[SHA_VAR_TOTAL];
 
+	ft_bzero(w, 64 * sizeof(uint32_t));
 	init_word_array(chunk, w);
 	init_sha_lvars(lvars, sha);
 	compression_loop(lvars, w);
-	change_hash_value(sha, lvars);
+	change_hash_value((uint32_t *)(sha->vars),
+		lvars);
 }

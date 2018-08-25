@@ -1,68 +1,63 @@
 #include "ft_ssl.h"
 
-static void			set_md_vars(unsigned int *dst,
-					t_container *src)
+static void				change_md_vars(
+						uint32_t *dst,
+						uint32_t *src)
 {
-	dst[A_VAR] = src->vars[A_VAR];
-	dst[B_VAR] = src->vars[B_VAR];
-	dst[C_VAR] = src->vars[C_VAR];
-	dst[D_VAR] = src->vars[D_VAR];
+	int				i;
+
+	i = -1;
+	while (++i < MD_VAR_TOTAL)
+		dst[i] += src[i];
 }
 
-static void			change_md_vars(t_container *dst,
-					unsigned int *src)
-{
-	dst->vars[A_VAR] += src[A_VAR];
-	dst->vars[B_VAR] += src[B_VAR];
-	dst->vars[C_VAR] += src[C_VAR];
-	dst->vars[D_VAR] += src[D_VAR];
-}
-
-void				set_f_g(unsigned int *f,
-					unsigned int *g,
-					unsigned int *t,
-					int i)
+static void				set_f_g(uint32_t *f,
+						uint32_t *g,
+						uint32_t *t,
+						int i)
 {
 	if (i <= 15)
 	{
-		*f = (t[B_VAR] & t[C_VAR]) | ((~t[B_VAR]) & t[D_VAR]);
+		*f = (t[B_MD] & t[C_MD]) | ((~t[B_MD]) & t[D_MD]);
 		*g = i;
 	}
 	else if (i <= 31)
 	{
-		*f = (t[D_VAR] & t[B_VAR]) | ((~t[D_VAR]) & t[C_VAR]);
+		*f = (t[D_MD] & t[B_MD]) | ((~t[D_MD]) & t[C_MD]);
 		*g = (5 * i + 1) % 16;
 	}
 	else if (i <= 47)
 	{
-		*f = t[B_VAR] ^ t[C_VAR] ^ t[D_VAR];
+		*f = t[B_MD] ^ t[C_MD] ^ t[D_MD];
 		*g = (3 * i + 5) % 16;
 	}
 	else
 	{
-		*f = t[C_VAR] ^ (t[B_VAR] | (~t[D_VAR]));
+		*f = t[C_MD] ^ (t[B_MD] | (~t[D_MD]));
 		*g = (7 * i) % 16;
 	}
 }
 
-void				proceed_chunk_md5(t_container *md,
-					unsigned char *chunk)
+void					proceed_chunk_md5(t_container *md,
+						uint8_t *chunk)
 {
-	unsigned int	t[MD_VAR_TOTAL];
-	int				i;
-	unsigned int	f;
-	unsigned int	g;
+	uint32_t		t[MD_VAR_TOTAL];
+	int					i;
+	uint32_t		f;
+	uint32_t		g;
+	const uint32_t	*m = (const uint32_t *)chunk;
 
-	set_md_vars(t, md);
+	ft_memmove(t, md->vars,
+		sizeof(UINT32_MAX) * MD_VAR_TOTAL);
 	i = -1;
 	while (++i < 64)
 	{
 		set_f_g(&f, &g, t, i);
-		f += t[A_VAR] + k_vars_md[i] + get_m(chunk, g);
-        t[A_VAR] = t[D_VAR];
-        t[D_VAR] = t[C_VAR];
-        t[C_VAR] = t[B_VAR];
-        t[B_VAR] += lrot(f, s_vars[i]);
+		f += t[A_MD] + g_kvars_md[i] + m[g];
+        t[A_MD] = t[D_MD];
+        t[D_MD] = t[C_MD];
+        t[C_MD] = t[B_MD];
+        t[B_MD] += lrot(f, g_svars[i]);
 	}
-	change_md_vars(md, t);
+	change_md_vars((uint32_t *)(md->vars), t);
 }
