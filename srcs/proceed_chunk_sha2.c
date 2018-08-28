@@ -10,14 +10,14 @@ static void			init_word_array(uint8_t *chunk,
 	ft_memmove(w, chunk, 64);
 	i = 15;
 	for (int k = 0; k < 16; k++)
-		reverse_uint((uint8_t *)&w[k]);
+		reverse((uint8_t *)&w[k], sizeof(uint32_t));
 	while (++i < 64)
 	{
-		s0 = rrot(w[i - 15], 7) ^
-			rrot(w[i - 15], 18) ^
+		s0 = RROT(w[i - 15], 7, 32) ^
+			RROT(w[i - 15], 18, 32) ^
 			(w[i - 15] >> 3);
-		s1 = rrot(w[i - 2], 17) ^
-			rrot(w[i - 2], 19) ^
+		s1 = RROT(w[i - 2], 17, 32) ^
+			RROT(w[i - 2], 19, 32) ^
 			(w[i - 2] >> 10);
 		w[i] = w[i - 16] + s0 + w[i - 7] + s1;
 	}
@@ -43,21 +43,21 @@ static void		change_hash_value(uint32_t *sha,
 static void		compression_loop(uint32_t *lvars,
 					uint32_t *w)
 {
-	int				i;
+	int			i;
 	uint32_t	t[6];
 
 	i = -1;
 	while (++i < 64)
 	{
-		t[0] = rrot(lvars[H_FOUR], 6) ^
-			rrot(lvars[H_FOUR], 11) ^
-			rrot(lvars[H_FOUR], 25);
+		t[0] = RROT(lvars[H_FOUR], 6, 32) ^
+			RROT(lvars[H_FOUR], 11, 32) ^
+			RROT(lvars[H_FOUR], 25, 32);
 		t[1] = (lvars[H_FOUR] & lvars[H_FIVE]) ^
 			((~lvars[H_FOUR]) & lvars[H_SIX]);
 		t[2] = lvars[H_SEVEN] +
 			t[0] + t[1] + g_kvars_sha[i] + w[i];
-		t[3] = rrot(lvars[H_ZERO], 2) ^
-		rrot(lvars[H_ZERO], 13) ^ rrot(lvars[H_ZERO], 22);
+		t[3] = RROT(lvars[H_ZERO], 2, 32) ^
+		RROT(lvars[H_ZERO], 13, 32) ^ RROT(lvars[H_ZERO], 22, 32);
 		t[4] = (lvars[H_ZERO] & lvars[H_ONE]) ^
 			(lvars[H_ZERO] & lvars[H_TWO]) ^
 			(lvars[H_ONE] & lvars[H_TWO]);

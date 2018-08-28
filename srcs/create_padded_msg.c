@@ -64,10 +64,5 @@ void		*create_padded_msg_sha512(void *msg,
 	padded_msg[padded_size - 2] = msg_len >> 8;
 	padded_msg[padded_size - 3] = msg_len >> 16;
 	padded_msg[padded_size - 4] = msg_len >> 24;
-	/*for (unsigned int i = 0; i < padded_size; i++)
-	{
-		ft_printf("%.2x ", padded_msg[i]);
-	}
-	ft_putchar('\n');*/
 	return (padded_msg);
 }

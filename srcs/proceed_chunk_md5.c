@@ -57,7 +57,7 @@ void					proceed_chunk_md5(t_container *md,
         t[A_MD] = t[D_MD];
         t[D_MD] = t[C_MD];
         t[C_MD] = t[B_MD];
-        t[B_MD] += lrot(f, g_svars[i]);
+        t[B_MD] += LROT(f, g_svars[i], 32);
 	}
 	change_md_vars((uint32_t *)(md->vars), t);
 }

@@ -20,13 +20,12 @@ SRC_NAME			=	main.c					\
 						utils.c					\
 						proceed_chunk_md5.c		\
 						proceed_chunk_sha2.c	\
-						ft_md5hash.c			\
-						ft_sha2hash.c			\
-						rotate.c				\
+						ft_hash.c				\
 						get_msg_from_file.c		\
 						initialize_vars.c		\
 						create_padded_msg.c		\
-						proceed_chunk_sha512.c
+						proceed_chunk_sha512.c	\
+						ft_print_hash.c
 
 all: $(NAME)
 

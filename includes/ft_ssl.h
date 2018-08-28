@@ -8,7 +8,19 @@
 # define K_LEN 64
 # define S_LEN 64
 # define K_LEN_EXTENDED
-# define HASH_TYPES {"MD5", "SHA256"}
+# define LROT(x, c, sz) ((x << c) | (x >> (sz - c)))
+# define RROT(x, c, sz) ((x >> c) | (x << (sz - c)))
+# define CHUNK_SIZES "\100\100\100\200"
+# define HASH_SIZES "\020\040\040\100"
+# define FLAG_P 1
+# define FLAG_Q 2
+# define FLAG_R 4
+# define FLAG_S 8
+# define FLAG_STDIN 32
+# define FLAG_I 16
+# define FLAGS_SSL "pqrsi"
+# define FLAG_SSL_TOTAL 5
+# define MD_TXT {"MD5","SHA256","SHA224","SHA512"}
 
 extern uint32_t g_svars[S_LEN];
 extern uint32_t	g_kvars_md[K_LEN];
@@ -39,8 +51,11 @@ typedef enum		e_shavar
 
 typedef enum		e_hashtype
 {
+	UNDEFINED = -1,
 	HASH_MD_FIVE,
-	HASH_SHA,
+	HASH_SHA256,
+	HASH_SHA224,
+	HASH_SHA512,
 	HASH_TOTAL
 }					t_hashtype;
 
@@ -49,41 +64,59 @@ typedef struct		s_container
 	void			*vars;
 	void			*padded_msg;
 	size_t			padded_msg_len;
+	t_hashtype		hashtype;
 }					t_container;
 
+typedef void	(*t_proceedchunk)(t_container *c,
+				uint8_t *chunk);
+typedef void	*(*t_create_padded_msg)(void *msg,
+				size_t msg_len,
+				size_t *new_msg_len);
+
+extern t_proceedchunk g_chunkfuncs[HASH_TOTAL];
+extern t_create_padded_msg g_cr_padd_funcs[HASH_TOTAL];
+
+typedef void	(*t_print_md)(t_container *hash);
 void				*get_stream(const int fd,
 					void *buf,
 					size_t buf_size);
-void				initialize_md_vars(t_container *md);
-void				initialize_sha256_vars(t_container *sha);
-void				initialize_sha224_vars(t_container *sha);
-void				initialize_sha512_vars(t_container *sha);
+
+/*
+** Initialize hash values
+*/
+void				initialize_vars(t_container *c);
+
+/*
+** Creating padded messages 
+** for differrent hash types
+*/
 void				*create_padded_msg_md5(void *msg,
-					size_t msg_len,
-					size_t *new_msg_len);
+					size_t msg_len,	size_t *new_msg_len);
 void				*create_padded_msg_sha2(void *msg,
-					size_t msg_len,
-					size_t *new_msg_len);
+					size_t msg_len,	size_t *new_msg_len);
 void				*create_padded_msg_sha512(void *msg,
-					size_t msg_len,
-					size_t *new_msg_len);
-uint32_t			lrot(uint32_t x, int c);
-uint32_t			rrot(uint32_t x, int c);
-uint64_t			rrot64(uint64_t x, int c);
-uint64_t			lrot64(uint64_t x, int c);
+					size_t msg_len, size_t *new_msg_len);
+
+/*
+** Chunk proceeding algorithms
+** for different types
+*/
 void				proceed_chunk_md5(t_container *md,
 					uint8_t *chunk);
 void				proceed_chunk_sha2(t_container *sha,
 					uint8_t *chunk);
 void				proceed_chunk_sha512(t_container *sha,
 					uint8_t *chunk);
-t_container			ft_md5hash(uint8_t *msg,
-					size_t len);
-t_container			ft_sha256hash(char *msg);
-t_container			ft_sha224hash(char *msg);
-t_container			ft_sha512hash(char *msg);
-char				*get_msg_from_file(
-					const char *filename);
-void				reverse_uint(uint8_t *val_addr);
-void				reverse_uint64(uint8_t *val_addr);
+
+t_container			ft_hash(uint8_t *msg,
+					size_t len, t_hashtype htype);
+
+char				*get_msg_from_file(const char *filename);
+void				reverse(uint8_t *ptr, size_t size);
+void				reverse_md(t_container *md);
+void				ft_print_hash(t_container *hash);
+void				ft_print_md5(t_container *hash);
+void				ft_print_sha256(t_container *hash);
+void				ft_print_sha224(t_container *hash);
+void				ft_print_sha512(t_container *hash);
 #endif

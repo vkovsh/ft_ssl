@@ -87,3 +87,43 @@ uint64_t g_kvars_sha512[K_LEN_EXTENDED] = {
 	0x3c9ebe0a15c9bebc, 0x431d67c49c100d4c,
 	0x4cc5d4becb3e42b6, 0x597f299cfc657e2a,
 	0x5fcb6fab3ad6faec, 0x6c44198c4a475817};
+
+t_proceedchunk g_chunkfuncs[HASH_TOTAL] = {
+	proceed_chunk_md5, proceed_chunk_sha2,
+	proceed_chunk_sha2, proceed_chunk_sha512};
+
+t_create_padded_msg g_cr_padd_funcs[HASH_TOTAL] = {
+	create_padded_msg_md5, create_padded_msg_sha2,
+	create_padded_msg_sha2, create_padded_msg_sha512};
+
+static void		swap(uint8_t *ptr_a, uint8_t *ptr_b)
+{
+	uint8_t		tmp;
+
+	tmp = *ptr_a;
+	*ptr_a = *ptr_b;
+	*ptr_b = tmp;
+}
+
+void			reverse(uint8_t *ptr, size_t size)
+{
+	size_t		i;
+
+	i = size / 2;
+	while (i--)
+		swap(ptr + i, ptr + size - i - 1);
+}
+
+void			reverse_md(t_container *md)
+{
+	int			i;
+	uint8_t		*val_addr;
+
+	i = -1;
+	while (++i < MD_VAR_TOTAL)
+	{
+		val_addr =
+			(uint8_t *)&(((uint32_t *)(md->vars))[i]);
+		reverse(val_addr, sizeof(uint32_t));
+	}
+}
