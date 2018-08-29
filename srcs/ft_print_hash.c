@@ -34,8 +34,8 @@ void			ft_print_sha384(t_container *hash)
 
 	v = (uint64_t *)(hash->vars);
 	ft_printf(g_format[hash->hashtype],
-	v[H_ZERO], v[H_ONE], v[H_TWO], v[H_THREE],
-	v[H_FOUR], v[H_FIVE]);
+	v[H0], v[H1], v[H2], v[H3],
+	v[H4], v[H5]);
 }
 
 void			ft_print_sha512_256(t_container *hash)
@@ -44,7 +44,7 @@ void			ft_print_sha512_256(t_container *hash)
 
 	v = (uint64_t *)(hash->vars);
 	ft_printf(g_format[hash->hashtype],
-	v[H_ZERO], v[H_ONE], v[H_TWO], v[H_THREE]);
+	v[H0], v[H1], v[H2], v[H3]);
 }
 
 void			ft_print_sha512_224(t_container *hash)
@@ -53,7 +53,7 @@ void			ft_print_sha512_224(t_container *hash)
 
 	v = (uint64_t *)(hash->vars);
 	ft_printf(g_format[hash->hashtype],
-	v[H_ZERO], v[H_ONE], v[H_TWO], v[H_THREE] >> 32);
+	v[H0], v[H1], v[H2], v[H3] >> 32);
 }
 
 void			ft_print_hash(t_container *hash)

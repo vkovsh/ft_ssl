@@ -12,19 +12,18 @@
 
 #include "ft_ssl.h"
 
-static void			init_word_array(uint8_t *chunk,
-					uint64_t *w)
+static void		init_word_array(uint8_t *chunk,
+				uint64_t *w)
 {
-	int				i;
-	uint64_t		s0;
-	uint64_t		s1;
+	int			i;
+	uint64_t	s0;
+	uint64_t	s1;
 
 	ft_memmove(w, chunk, 128);
-	i = 15;
-	for (int k = 0; k < 16; k++)
-	{
-		reverse((uint8_t *)&w[k], sizeof(uint64_t));
-	}
+	i = -1;
+	while (++i < 16)
+		reverse((uint8_t *)&w[i], sizeof(uint64_t));
+	i--;
 	while (++i < 80)
 	{
 		s0 = RROT(w[i - 15], 1, 64) ^
@@ -63,27 +62,24 @@ static void		compression_loop(uint64_t *lvars,
 	i = -1;
 	while (++i < 80)
 	{
-		t[0] = RROT(lvars[H_FOUR], 14, 64) ^
-			RROT(lvars[H_FOUR], 18, 64) ^
-			RROT(lvars[H_FOUR], 41, 64);
-		t[1] = (lvars[H_FOUR] & lvars[H_FIVE]) ^
-			((~lvars[H_FOUR]) & lvars[H_SIX]);
-		t[2] = lvars[H_SEVEN] +
-			t[0] + t[1] + g_kvars_sha512[i] + w[i];
-		t[3] = RROT(lvars[H_ZERO], 28, 64) ^
-		RROT(lvars[H_ZERO], 34, 64) ^ RROT(lvars[H_ZERO], 39, 64);
-		t[4] = (lvars[H_ZERO] & lvars[H_ONE]) ^
-			(lvars[H_ZERO] & lvars[H_TWO]) ^
-			(lvars[H_ONE] & lvars[H_TWO]);
+		t[0] = RROT(lvars[H4], 14, 64) ^
+		RROT(lvars[H4], 18, 64) ^ RROT(lvars[H4], 41, 64);
+		t[1] = (lvars[H4] & lvars[H5]) ^ ((~lvars[H4]) & lvars[H6]);
+		t[2] = lvars[H7] +
+		t[0] + t[1] + g_kvars_sha512[i] + w[i];
+		t[3] = RROT(lvars[H0], 28, 64) ^
+		RROT(lvars[H0], 34, 64) ^ RROT(lvars[H0], 39, 64);
+		t[4] = (lvars[H0] & lvars[H1]) ^
+		(lvars[H0] & lvars[H2]) ^ (lvars[H1] & lvars[H2]);
 		t[5] = t[3] + t[4];
-		lvars[H_SEVEN] = lvars[H_SIX];
-		lvars[H_SIX] = lvars[H_FIVE];
-		lvars[H_FIVE] = lvars[H_FOUR];
-		lvars[H_FOUR] = lvars[H_THREE] + t[2];
-		lvars[H_THREE] = lvars[H_TWO];
-		lvars[H_TWO] = lvars[H_ONE];
-		lvars[H_ONE] = lvars[H_ZERO];
-		lvars[H_ZERO] = t[2] + t[5];
+		lvars[H7] = lvars[H6];
+		lvars[H6] = lvars[H5];
+		lvars[H5] = lvars[H4];
+		lvars[H4] = lvars[H3] + t[2];
+		lvars[H3] = lvars[H2];
+		lvars[H2] = lvars[H1];
+		lvars[H1] = lvars[H0];
+		lvars[H0] = t[2] + t[5];
 	}
 }
 

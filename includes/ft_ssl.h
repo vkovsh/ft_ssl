@@ -13,6 +13,7 @@
 #ifndef FT_SSL_H
 # define FT_SSL_H
 # include "ft_printf.h"
+# include <stdbool.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <sys/stat.h>
@@ -34,6 +35,9 @@
 # define FLAG_SSL_TOTAL 5
 # define PART_ONE "MD5","SHA256","SHA224","SHA512"
 # define MD_TXT {PART_ONE,"SHA384","SHA512/256","SHA512/224"}
+# define INV_OPT "%s '%c'\n", "ft_ssl: invalid option --"
+# define NO_FILE "'%s': No such file or directory\n"
+# define USG "ft_ssl command[command opts][command args]\n"
 
 extern uint32_t g_svars[S_LEN];
 extern uint32_t	g_kvars_md[K_LEN];
@@ -51,14 +55,14 @@ typedef enum		e_mdvar
 
 typedef enum		e_shavar
 {
-	H_ZERO,
-	H_ONE,
-	H_TWO,
-	H_THREE,
-	H_FOUR,
-	H_FIVE,
-	H_SIX,
-	H_SEVEN,
+	H0,
+	H1,
+	H2,
+	H3,
+	H4,
+	H5,
+	H6,
+	H7,
 	SHA_VAR_TOTAL
 }					t_shavar;
 
@@ -129,7 +133,7 @@ void				proceed_chunk_sha512(t_container *sha,
 
 t_container			ft_hash(uint8_t *msg,
 					size_t len, t_hashtype htype);
-					
+
 void				reverse(uint8_t *ptr, size_t size);
 void				reverse_md(t_container *md);
 void				ft_print_hash(t_container *hash);
@@ -140,4 +144,12 @@ void				ft_print_sha512(t_container *hash);
 void				ft_print_sha384(t_container *hash);
 void				ft_print_sha512_256(t_container *hash);
 void				ft_print_sha512_224(t_container *hash);
+t_hashtype			get_md_cmd(const char *str);
+uint8_t				append_flag(uint8_t flag,
+					const char *str);
+void				ft_info(const char *cmd);
+void				proceed_arg(uint8_t flags,
+					char *txt, t_hashtype htype);
+uint8_t				*get_file(const char *path,
+					size_t *size);
 #endif

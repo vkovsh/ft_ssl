@@ -12,12 +12,12 @@
 
 #include "ft_ssl.h"
 
-static void			init_word_array(uint8_t *chunk,
-					uint32_t *w)
+static void		init_word_array(uint8_t *chunk,
+				uint32_t *w)
 {
-	int				i;
-	int				s0;
-	int				s1;
+	int			i;
+	int			s0;
+	int			s1;
 
 	ft_memmove(w, chunk, 64);
 	i = -1;
@@ -46,7 +46,7 @@ static void		init_sha_lvars(uint32_t *lvars,
 static void		change_hash_value(uint32_t *sha,
 					uint32_t *lvars)
 {
-	int				i;
+	int			i;
 
 	i = -1;
 	while (++i < SHA_VAR_TOTAL)
@@ -54,7 +54,7 @@ static void		change_hash_value(uint32_t *sha,
 }
 
 static void		compression_loop(uint32_t *v,
-					uint32_t *w)
+				uint32_t *w)
 {
 	int			i;
 	uint32_t	t[6];
@@ -62,30 +62,28 @@ static void		compression_loop(uint32_t *v,
 	i = -1;
 	while (++i < 64)
 	{
-		t[0] = RROT(v[H_FOUR], 6, 32) ^
-		RROT(v[H_FOUR], 11, 32) ^ RROT(v[H_FOUR], 25, 32);
-		t[1] = (v[H_FOUR] & v[H_FIVE]) ^
-		((~v[H_FOUR]) & v[H_SIX]);
-		t[2] = v[H_SEVEN] +
-			t[0] + t[1] + g_kvars_sha[i] + w[i];
-		t[3] = RROT(v[H_ZERO], 2, 32) ^
-		RROT(v[H_ZERO], 13, 32) ^ RROT(v[H_ZERO], 22, 32);
-		t[4] = (v[H_ZERO] & v[H_ONE]) ^
-			(v[H_ZERO] & v[H_TWO]) ^ (v[H_ONE] & v[H_TWO]);
+		t[0] = RROT(v[H4], 6, 32) ^
+		RROT(v[H4], 11, 32) ^ RROT(v[H4], 25, 32);
+		t[1] = (v[H4] & v[H5]) ^ ((~v[H4]) & v[H6]);
+		t[2] = v[H7] + t[0] + t[1] + g_kvars_sha[i] + w[i];
+		t[3] = RROT(v[H0], 2, 32) ^
+		RROT(v[H0], 13, 32) ^ RROT(v[H0], 22, 32);
+		t[4] = (v[H0] & v[H1]) ^
+			(v[H0] & v[H2]) ^ (v[H1] & v[H2]);
 		t[5] = t[3] + t[4];
-		v[H_SEVEN] = v[H_SIX];
-		v[H_SIX] = v[H_FIVE];
-		v[H_FIVE] = v[H_FOUR];
-		v[H_FOUR] = v[H_THREE] + t[2];
-		v[H_THREE] = v[H_TWO];
-		v[H_TWO] = v[H_ONE];
-		v[H_ONE] = v[H_ZERO];
-		v[H_ZERO] = t[2] + t[5];
+		v[H7] = v[H6];
+		v[H6] = v[H5];
+		v[H5] = v[H4];
+		v[H4] = v[H3] + t[2];
+		v[H3] = v[H2];
+		v[H2] = v[H1];
+		v[H1] = v[H0];
+		v[H0] = t[2] + t[5];
 	}
 }
 
-void				proceed_chunk_sha2(t_container *sha,
-					uint8_t *chunk)
+void			proceed_chunk_sha2(t_container *sha,
+				uint8_t *chunk)
 {
 	uint32_t	w[64];
 	uint32_t	lvars[SHA_VAR_TOTAL];
@@ -94,6 +92,5 @@ void				proceed_chunk_sha2(t_container *sha,
 	init_word_array(chunk, w);
 	init_sha_lvars(lvars, sha);
 	compression_loop(lvars, w);
-	change_hash_value((uint32_t *)(sha->vars),
-		lvars);
+	change_hash_value((uint32_t *)(sha->vars), lvars);
 }

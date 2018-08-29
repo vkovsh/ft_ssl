@@ -63,7 +63,7 @@ uint64_t g_kvars_sha512[K_LEN_EXTENDED] = {
 	0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc,
 	0x3956c25bf348b538, 0x59f111f1b605d019,
 	0x923f82a4af194f9b, 0xab1c5ed5da6d8118,
-	0xd807aa98a3030242, 0x12835b0145706fbe, 
+	0xd807aa98a3030242, 0x12835b0145706fbe,
 	0x243185be4ee4b28c, 0x550c7dc3d5ffb4e2,
 	0x72be5d74f27b896f, 0x80deb1fe3b1696b1,
 	0x9bdc06a725c71235, 0xc19bf174cf692694,
@@ -142,4 +142,15 @@ void			reverse_md(t_container *md)
 			(uint8_t *)&(((uint32_t *)(md->vars))[i]);
 		reverse(val_addr, sizeof(uint32_t));
 	}
+}
+
+void			ft_info(const char *cmd)
+{
+	ft_printf("ft_ssl: Error: '%s' is bad command\n", cmd);
+	ft_printf("Standard commands\n(in progress)\n\n");
+	ft_printf("Message Digest commands\n");
+	ft_printf("md5 sha224 sha256 sha512 sha384");
+	ft_printf("sha512/256 sha512/224\n\n");
+	ft_printf("Cipher commands\n(in progress)\n");
+	exit(1);
 }
