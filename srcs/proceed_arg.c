@@ -18,7 +18,7 @@ static bool			check_s_flag(uint8_t flags,
 {
 	if (flags & FLAG_S)
 	{
-		*stream = (uint8_t *)txt;
+		*stream = (uint8_t *)ft_strdup(txt);
 		*size = ft_strlen(txt);
 	}
 	else
@@ -68,8 +68,9 @@ void				proceed_arg(uint8_t flags,
 		return ;
 	hash = ft_hash(stream, size, htype);
 	if (flags & FLAG_P)
-		write(1, stream, size);
+		ft_printf("%s", txt);
 	proceed_q_r_def(flags, &hash, htype, txt);
 	free(hash.vars);
 	free(hash.padded_msg);
+	free(stream);
 }

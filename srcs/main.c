@@ -74,7 +74,7 @@ int					main(int ac, char **av)
 		i = 1;
 		while (++i < ac && av[i][0] == '-')
 			flags = append_flag(flags, av[i]);
-		if (i == ac)
+		if (flags & FLAG_P || i == ac)
 			handle_input(flags, htype);
 		while (i++ < ac)
 			proceed_arg(flags, av[i - 1], htype);
