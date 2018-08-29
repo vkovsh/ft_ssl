@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FTSSL_H
-# define FTSSL_H
+#ifndef FT_SSL_H
+# define FT_SSL_H
 # include "ft_printf.h"
 # include <fcntl.h>
 # include <limits.h>
@@ -32,7 +32,8 @@
 # define FLAG_I 16
 # define FLAGS_SSL "pqrsi"
 # define FLAG_SSL_TOTAL 5
-# define MD_TXT {"MD5","SHA256","SHA224","SHA512","SHA384","SHA512/256", "SHA512/224"}
+# define PART_ONE "MD5","SHA256","SHA224","SHA512"
+# define MD_TXT {PART_ONE,"SHA384","SHA512/256","SHA512/224"}
 
 extern uint32_t g_svars[S_LEN];
 extern uint32_t	g_kvars_md[K_LEN];
@@ -92,6 +93,9 @@ extern t_proceedchunk g_chunkfuncs[HASH_TOTAL];
 extern t_create_padded_msg g_cr_padd_funcs[HASH_TOTAL];
 
 typedef void	(*t_print_md)(t_container *hash);
+extern t_print_md g_print_funcs[HASH_TOTAL];
+extern const char *g_format[HASH_TOTAL];
+
 void				*get_stream(const int fd,
 					void *buf,
 					size_t buf_size);
@@ -102,13 +106,13 @@ void				*get_stream(const int fd,
 void				initialize_vars(t_container *c);
 
 /*
-** Creating padded messages 
+** Creating padded messages
 ** for differrent hash types
 */
 void				*create_padded_msg_md5(void *msg,
-					size_t msg_len,	size_t *new_msg_len);
+					size_t msg_len, size_t *new_msg_len);
 void				*create_padded_msg_sha2(void *msg,
-					size_t msg_len,	size_t *new_msg_len);
+					size_t msg_len, size_t *new_msg_len);
 void				*create_padded_msg_sha512(void *msg,
 					size_t msg_len, size_t *new_msg_len);
 
@@ -125,8 +129,7 @@ void				proceed_chunk_sha512(t_container *sha,
 
 t_container			ft_hash(uint8_t *msg,
 					size_t len, t_hashtype htype);
-
-char				*get_msg_from_file(const char *filename);
+					
 void				reverse(uint8_t *ptr, size_t size);
 void				reverse_md(t_container *md);
 void				ft_print_hash(t_container *hash);

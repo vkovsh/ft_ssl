@@ -25,7 +25,8 @@ SRC_NAME			=	main.c					\
 						initialize_vars.c		\
 						create_padded_msg.c		\
 						proceed_chunk_sha512.c	\
-						ft_print_hash.c
+						ft_print_hash.c			\
+						ft_print_hash2.c				
 
 all: $(NAME)
 

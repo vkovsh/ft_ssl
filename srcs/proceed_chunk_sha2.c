@@ -20,9 +20,10 @@ static void			init_word_array(uint8_t *chunk,
 	int				s1;
 
 	ft_memmove(w, chunk, 64);
-	i = 15;
-	for (int k = 0; k < 16; k++)
-		reverse((uint8_t *)&w[k], sizeof(uint32_t));
+	i = -1;
+	while (++i < 16)
+		reverse((uint8_t *)&w[i], sizeof(uint32_t));
+	i--;
 	while (++i < 64)
 	{
 		s0 = RROT(w[i - 15], 7, 32) ^
@@ -52,7 +53,7 @@ static void		change_hash_value(uint32_t *sha,
 		sha[i] += lvars[i];
 }
 
-static void		compression_loop(uint32_t *lvars,
+static void		compression_loop(uint32_t *v,
 					uint32_t *w)
 {
 	int			i;
@@ -61,27 +62,25 @@ static void		compression_loop(uint32_t *lvars,
 	i = -1;
 	while (++i < 64)
 	{
-		t[0] = RROT(lvars[H_FOUR], 6, 32) ^
-			RROT(lvars[H_FOUR], 11, 32) ^
-			RROT(lvars[H_FOUR], 25, 32);
-		t[1] = (lvars[H_FOUR] & lvars[H_FIVE]) ^
-			((~lvars[H_FOUR]) & lvars[H_SIX]);
-		t[2] = lvars[H_SEVEN] +
+		t[0] = RROT(v[H_FOUR], 6, 32) ^
+		RROT(v[H_FOUR], 11, 32) ^ RROT(v[H_FOUR], 25, 32);
+		t[1] = (v[H_FOUR] & v[H_FIVE]) ^
+		((~v[H_FOUR]) & v[H_SIX]);
+		t[2] = v[H_SEVEN] +
 			t[0] + t[1] + g_kvars_sha[i] + w[i];
-		t[3] = RROT(lvars[H_ZERO], 2, 32) ^
-		RROT(lvars[H_ZERO], 13, 32) ^ RROT(lvars[H_ZERO], 22, 32);
-		t[4] = (lvars[H_ZERO] & lvars[H_ONE]) ^
-			(lvars[H_ZERO] & lvars[H_TWO]) ^
-			(lvars[H_ONE] & lvars[H_TWO]);
+		t[3] = RROT(v[H_ZERO], 2, 32) ^
+		RROT(v[H_ZERO], 13, 32) ^ RROT(v[H_ZERO], 22, 32);
+		t[4] = (v[H_ZERO] & v[H_ONE]) ^
+			(v[H_ZERO] & v[H_TWO]) ^ (v[H_ONE] & v[H_TWO]);
 		t[5] = t[3] + t[4];
-		lvars[H_SEVEN] = lvars[H_SIX];
-		lvars[H_SIX] = lvars[H_FIVE];
-		lvars[H_FIVE] = lvars[H_FOUR];
-		lvars[H_FOUR] = lvars[H_THREE] + t[2];
-		lvars[H_THREE] = lvars[H_TWO];
-		lvars[H_TWO] = lvars[H_ONE];
-		lvars[H_ONE] = lvars[H_ZERO];
-		lvars[H_ZERO] = t[2] + t[5];
+		v[H_SEVEN] = v[H_SIX];
+		v[H_SIX] = v[H_FIVE];
+		v[H_FIVE] = v[H_FOUR];
+		v[H_FOUR] = v[H_THREE] + t[2];
+		v[H_THREE] = v[H_TWO];
+		v[H_TWO] = v[H_ONE];
+		v[H_ONE] = v[H_ZERO];
+		v[H_ZERO] = t[2] + t[5];
 	}
 }
 

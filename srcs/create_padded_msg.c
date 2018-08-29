@@ -16,7 +16,6 @@ void		*create_padded_msg_md5(void *msg,
 			size_t msg_len,
 			size_t *new_msg_len)
 {
-	
 	size_t	padded_size;
 	uint8_t	*padded_msg;
 

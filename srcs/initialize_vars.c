@@ -13,7 +13,7 @@
 #include "ft_ssl.h"
 
 uint32_t g_md_default[MD_VAR_TOTAL] = {
-	0x67452301, 0xefcdab89,	0x98badcfe, 0x10325476};
+	0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476};
 
 uint32_t g_sha256_default[SHA_VAR_TOTAL] = {
 	0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,

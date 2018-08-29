@@ -29,5 +29,5 @@ t_container		ft_hash(uint8_t *msg,
 		g_chunkfuncs[c.hashtype](&c, c.padded_msg + i);
 		i += ((uint8_t *)CHUNK_SIZES)[c.hashtype];
 	}
-	return (c);			
+	return (c);
 }
