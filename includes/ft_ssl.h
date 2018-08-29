@@ -21,8 +21,8 @@
 # define K_LEN 64
 # define S_LEN 64
 # define K_LEN_EXTENDED
-# define LROT(x, c, sz) ((x << c) | (x >> (sz - c)))
-# define RROT(x, c, sz) ((x >> c) | (x << (sz - c)))
+# define LROT(x, c, sz) (((x) << (c)) | ((x) >> (sz - (c))))
+# define RROT(x, c, sz) (((x) >> (c)) | ((x) << (sz - (c))))
 # define CHUNK_SIZES "\100\100\100\200\200\200\200"
 # define HASH_SIZES "\020\040\040\100\100\100\100"
 # define FLAG_P 1

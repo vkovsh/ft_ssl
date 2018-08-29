@@ -39,9 +39,9 @@ void				handle_input(uint8_t flags,
 					t_hashtype htype)
 {
 	char			*line;
-	char			buf[32];
+	char			buf[4096];
 
-	ft_bzero(buf, 32);
+	ft_bzero(buf, 4096);
 	if (flags & FLAG_I)
 	{
 		while (get_next_line(0, &line))
@@ -54,7 +54,7 @@ void				handle_input(uint8_t flags,
 	{
 		flags |= FLAG_STDIN;
 		flags |= FLAG_S;
-		line = get_stream(0, buf, 32);
+		line = get_stream(0, buf, 4096);
 		proceed_arg(flags, line, htype);
 		free(line);
 	}

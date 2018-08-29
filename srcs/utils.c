@@ -149,7 +149,7 @@ void			ft_info(const char *cmd)
 	ft_printf("ft_ssl: Error: '%s' is bad command\n", cmd);
 	ft_printf("Standard commands\n(in progress)\n\n");
 	ft_printf("Message Digest commands\n");
-	ft_printf("md5 sha224 sha256 sha512 sha384");
+	ft_printf("md5 sha224 sha256 sha512 sha384 ");
 	ft_printf("sha512/256 sha512/224\n\n");
 	ft_printf("Cipher commands\n(in progress)\n");
 	exit(1);
