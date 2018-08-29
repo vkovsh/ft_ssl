@@ -90,11 +90,15 @@ uint64_t g_kvars_sha512[K_LEN_EXTENDED] = {
 
 t_proceedchunk g_chunkfuncs[HASH_TOTAL] = {
 	proceed_chunk_md5, proceed_chunk_sha2,
-	proceed_chunk_sha2, proceed_chunk_sha512};
+	proceed_chunk_sha2, proceed_chunk_sha512,
+	proceed_chunk_sha512, proceed_chunk_sha512,
+	proceed_chunk_sha512};
 
 t_create_padded_msg g_cr_padd_funcs[HASH_TOTAL] = {
 	create_padded_msg_md5, create_padded_msg_sha2,
-	create_padded_msg_sha2, create_padded_msg_sha512};
+	create_padded_msg_sha2, create_padded_msg_sha512,
+	create_padded_msg_sha512, create_padded_msg_sha512,
+	create_padded_msg_sha512};
 
 static void		swap(uint8_t *ptr_a, uint8_t *ptr_b)
 {

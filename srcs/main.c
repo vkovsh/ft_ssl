@@ -15,6 +15,12 @@ t_hashtype			get_md_cmd(const char *str)
 		htype = HASH_SHA224;
 	else if (!ft_strcmp(upper, "SHA512"))
 		htype = HASH_SHA512;
+	else if (!ft_strcmp(upper, "SHA384"))
+		htype = HASH_SHA384;
+	else if (!ft_strcmp(upper, "SHA512/256"))
+		htype = HASH_SHA512_256;
+	else if (!ft_strcmp(upper, "SHA512/224"))
+		htype = HASH_SHA512_224;
 	ft_strdel(&upper);
 	return (htype);
 }

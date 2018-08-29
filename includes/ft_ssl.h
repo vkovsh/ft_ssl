@@ -10,8 +10,8 @@
 # define K_LEN_EXTENDED
 # define LROT(x, c, sz) ((x << c) | (x >> (sz - c)))
 # define RROT(x, c, sz) ((x >> c) | (x << (sz - c)))
-# define CHUNK_SIZES "\100\100\100\200"
-# define HASH_SIZES "\020\040\040\100"
+# define CHUNK_SIZES "\100\100\100\200\200\200\200"
+# define HASH_SIZES "\020\040\040\100\100\100\100"
 # define FLAG_P 1
 # define FLAG_Q 2
 # define FLAG_R 4
@@ -20,7 +20,7 @@
 # define FLAG_I 16
 # define FLAGS_SSL "pqrsi"
 # define FLAG_SSL_TOTAL 5
-# define MD_TXT {"MD5","SHA256","SHA224","SHA512"}
+# define MD_TXT {"MD5","SHA256","SHA224","SHA512","SHA384","SHA512/256", "SHA512/224"}
 
 extern uint32_t g_svars[S_LEN];
 extern uint32_t	g_kvars_md[K_LEN];
@@ -56,6 +56,9 @@ typedef enum		e_hashtype
 	HASH_SHA256,
 	HASH_SHA224,
 	HASH_SHA512,
+	HASH_SHA384,
+	HASH_SHA512_256,
+	HASH_SHA512_224,
 	HASH_TOTAL
 }					t_hashtype;
 
@@ -119,4 +122,7 @@ void				ft_print_md5(t_container *hash);
 void				ft_print_sha256(t_container *hash);
 void				ft_print_sha224(t_container *hash);
 void				ft_print_sha512(t_container *hash);
+void				ft_print_sha384(t_container *hash);
+void				ft_print_sha512_256(t_container *hash);
+void				ft_print_sha512_224(t_container *hash);
 #endif
