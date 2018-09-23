@@ -66,6 +66,11 @@ int					main(int ac, char **av)
 	uint8_t			flags;
 	int				i;
 
+	//char *code;
+	//code = encode_to_base64((uint8_t *)(av[1]), ft_strlen(av[1]));
+	//ft_printf("%s\n", code);
+	//print_base64_code(code);
+	//ft_printf("%s\n", (char *)decode_from_base64(code));
 	if (ac >= 2)
 	{
 		if ((htype = get_md_cmd(av[1])) == UNDEFINED)

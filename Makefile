@@ -29,7 +29,10 @@ SRC_NAME			=	main.c					\
 						ft_print_hash2.c		\
 						get_md_cmd.c			\
 						append_flag.c			\
-						proceed_arg.c	
+						proceed_arg.c			\
+						encode_to_base64.c		\
+						decode_from_base64.c	\
+						print_base64_code.c
 
 all: $(NAME)
 

@@ -38,6 +38,11 @@
 # define INV_OPT "%s '%c'\n", "ft_ssl: invalid option --"
 # define NO_FILE "'%s': No such file or directory\n"
 # define USG "ft_ssl command[command opts][command args]\n"
+# define ALPHA_UPPER "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+# define ALPHA_LOW "abcdefghijklmnopqrstuvwxyz"
+# define NUMBERS "0123456789"
+# define BASE64_TRANSFORM ALPHA_UPPER ALPHA_LOW NUMBERS "+/"
+# define CIPHER_TXT {"BASE64"}
 
 extern uint32_t g_svars[S_LEN];
 extern uint32_t	g_kvars_md[K_LEN];
@@ -152,4 +157,12 @@ void				proceed_arg(uint8_t flags,
 					char *txt, t_hashtype htype);
 uint8_t				*get_file(const char *path,
 					size_t *size);
+
+/*
+** BASE64 encode and decode functions
+*/
+char				*encode_to_base64(const uint8_t *bin,
+					size_t lenght);
+uint8_t				*decode_from_base64(const char *code);
+void				print_base64_code(const char *code);
 #endif
