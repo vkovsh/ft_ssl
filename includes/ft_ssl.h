@@ -30,11 +30,15 @@
 # define FLAG_R 4
 # define FLAG_S 8
 # define FLAG_I 16
-# define FLAG_E 32
-# define FLAG_D 64
-# define FLAG_STDIN 128
-# define FLAGS_SSL "pqrsied"
-# define FLAG_SSL_TOTAL 7
+# define FLAG_O 32
+# define FLAG_E 64
+# define FLAG_D 128
+# define FLAG_A 256
+# define FLAG_K 512
+# define FLAG_V 1024
+# define FLAG_STDIN 2048
+# define FLAGS_SSL "pqrsioedakv"
+# define FLAG_SSL_TOTAL 11
 # define PART_ONE "MD5","SHA256","SHA224","SHA512"
 # define MD_TXT {PART_ONE,"SHA384","SHA512/256","SHA512/224"}
 # define INV_OPT "%s '%c'\n", "ft_ssl: invalid option --"
@@ -185,5 +189,6 @@ uint8_t				*get_file(const char *path,
 char				*encode_to_base64(const uint8_t *bin,
 					size_t lenght);
 uint8_t				*decode_from_base64(const char *code);
-void				print_base64_code(const char *code);
+void				print_base64_code(const int fd,
+					const char *code);
 #endif

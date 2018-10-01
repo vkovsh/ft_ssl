@@ -60,7 +60,9 @@ void				handle_input_for_hash(uint16_t flags,
 	}
 }
 
-void				handle_input_for_cipher(uint16_t flags,
+void				crypt_arg(const int read_fd,
+					const int write_fd,
+					uint16_t flags,
 					t_hashtype htype)
 {
 	uint8_t			*binary;
@@ -68,62 +70,80 @@ void				handle_input_for_cipher(uint16_t flags,
 	char			buf[4096];
 
 	ft_bzero(buf, 4096);
-	if (flags == 200 || htype == -1)
+	if (htype == -1)
 		exit(1);
-	binary = (uint8_t *)get_stream(STDIN, buf, 4096);
+	binary = (uint8_t *)get_stream(read_fd, buf, 4096);
 	if ((flags & FLAG_E) || !(flags & FLAG_D))
 	{
-		code = encode_to_base64(binary,
-			ft_strlen((char *)binary));
-		print_base64_code(code);
+		code = encode_to_base64(binary,	ft_strlen((char *)binary));
+		print_base64_code(write_fd, code);
 	}
 	else
 	{
 		code = (char *)decode_from_base64((char *)binary);
-		ft_printf("%s\n", code);
+		ft_dprintf(write_fd, "%s", code);
 	}
 	free(code);
 	free(binary);
 }
 
+void				proceed_args_for_hashing(const int ac,
+					char **av, const int cmd)
+{
+	int				flags;
+	int				i;
+
+	flags = 0;
+	i = 1;
+	while (++i < ac && av[i][0] == '-')
+		flags = append_flag(flags, av[i]);
+	if (flags & FLAG_P || i == ac)
+		handle_input_for_hash(flags, cmd);
+	while (i++ < ac)
+		hash_arg(flags, av[i - 1], cmd);
+}
+void				proceed_args_for_cipher(const int ac,
+					char **av, const int cmd)
+{
+	char			*in;
+	char			*out;
+	int				flags;
+	int				i;
+
+	in = NULL;
+	out = NULL;
+	flags = 0;
+	i = 1;
+	while (++i < ac)
+	{
+		if (av[i][0] == '-')
+			flags = append_flag(flags, av[i]);
+		else if (flags & FLAG_I && !in)
+			in = av[i];
+		else if (flags & FLAG_O && !out)
+			out = av[i];
+	}
+	int read_fd = (in) ? open(in, O_RDONLY) : 0;
+	int write_fd = (out) ? open(out, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR) : 1;
+	if (read_fd == -1 || write_fd == -1)
+		exit(1);
+	crypt_arg(read_fd, write_fd, flags, cmd);
+	if (read_fd != 0)
+		close(read_fd);
+	if (write_fd != 1)
+		close(write_fd);
+}
+
 int					main(int ac, char **av)
 {
 	int				cmd;
-	uint16_t		flags;
-	int				i;
 
 	if (ac >= 2)
 	{
-		flags = 0;
-		i = 1;
 		if ((cmd = get_cmd(av[1], HASH_CMD, HASH_TOTAL)) != -1)
-		{
-			while (++i < ac && av[i][0] == '-')
-				flags = append_flag(flags, av[i]);
-			if (flags & FLAG_P || i == ac)
-				handle_input_for_hash(flags, cmd);
-			while (i++ < ac)
-				hash_arg(flags, av[i - 1], cmd);
-		}
+			proceed_args_for_hashing(ac, av, cmd);
 		else if ((cmd = get_cmd(av[1], CIPHER_CMD, CIPHER_TOTAL)) != -1)
-		{
-			while (++i < ac && av[i][0] == '-')
-				flags = append_flag(flags, av[i]);
-			if ((flags & FLAG_D) && (flags & FLAG_E))
-				exit(1);
-			if (flags & FLAG_P || i == ac)
-				handle_input_for_cipher(flags, cmd);
-			/*while (i++ < ac)
-			{
-				if (flags & FLAG_E)
-				{
-					char *tmp = encode_to_base64((uint8_t *)(av[i - 1]),
-							ft_strlen(av[i - 1]));
-					ft_printf("%s\n", tmp);
-					ft_strdel(&tmp);
-				}
-			}*/
-		}
+			proceed_args_for_cipher(ac, av, cmd);
 		else
 			ft_info(av[1]);
 	}

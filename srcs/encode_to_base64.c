@@ -44,7 +44,7 @@ char			*encode_to_base64(const uint8_t *bin,
 		encode_trinity(code, &j, init_trinity(bin[i],
 			(i + 1 < (int)length) ? bin[i + 1] : 0, 0));
 	code[++j] = '\0';
-	while (code[--j] == 'A')
+	while (code[--j] == 'A' && j > (int)length)
 		code[j] = '=';
 	return (code);
 }

@@ -4,6 +4,7 @@ CC					=	gcc
 CC_FLAGS			=	-Wall -Werror -Wextra -g -o0
 
 SRC_PATH			=	./srcs/
+HASH_PATH			=	$(SRC_PATH)hash/
 
 INC_PATH			=	./includes/ $(LIBFTPRINTF_PATH)includes/ $(LIBFT_PATH)includes/
 OBJ_PATH			=	./obj/
@@ -15,21 +16,23 @@ OBJ					=	$(addprefix $(OBJ_PATH),$(OBJ_NAME))
 INC					=	$(addprefix -I, $(INC_PATH))
 
 OBJ_NAME			=	$(SRC_NAME:.c=.o)
+OBJ_NAME			+=	$(HASH_NAME:.c=.o)
 
-SRC_NAME			=	main.c					\
-						utils.c					\
+HASH_NAME			=	utils.c					\
 						proceed_chunk_md5.c		\
 						proceed_chunk_sha2.c	\
 						ft_hash.c				\
-						get_msg_from_file.c		\
 						initialize_vars.c		\
 						create_padded_msg.c		\
 						proceed_chunk_sha512.c	\
 						ft_print_hash.c			\
 						ft_print_hash2.c		\
+						hash_arg.c
+
+SRC_NAME			=	main.c					\
+						get_msg_from_file.c		\
 						get_cmd.c				\
 						append_flag.c			\
-						hash_arg.c				\
 						encode_to_base64.c		\
 						decode_from_base64.c	\
 						print_base64_code.c
@@ -42,6 +45,11 @@ $(NAME): $(OBJ)
 	@echo "Compiling" [ $(NAME) ]
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
+	@mkdir -p $(OBJ_PATH)
+	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC)
+	@echo "Linking" [ $< ]
+
+$(OBJ_PATH)%.o: $(HASH_PATH)%.c
 	@mkdir -p $(OBJ_PATH)
 	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC)
 	@echo "Linking" [ $< ]
