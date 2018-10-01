@@ -1,7 +1,7 @@
 NAME				=	ft_ssl
 
 CC					=	gcc
-CC_FLAGS			=	-Wall -Werror -Wextra -g
+CC_FLAGS			=	-Wall -Werror -Wextra -g -o0
 
 SRC_PATH			=	./srcs/
 
@@ -27,9 +27,9 @@ SRC_NAME			=	main.c					\
 						proceed_chunk_sha512.c	\
 						ft_print_hash.c			\
 						ft_print_hash2.c		\
-						get_md_cmd.c			\
+						get_cmd.c				\
 						append_flag.c			\
-						proceed_arg.c			\
+						hash_arg.c				\
 						encode_to_base64.c		\
 						decode_from_base64.c	\
 						print_base64_code.c

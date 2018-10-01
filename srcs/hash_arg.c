@@ -12,7 +12,7 @@
 
 #include "ft_ssl.h"
 
-static bool			check_s_flag(uint8_t flags,
+static bool			check_s_flag(uint16_t flags,
 					char *txt, uint8_t **stream,
 					size_t *size)
 {
@@ -29,7 +29,7 @@ static bool			check_s_flag(uint8_t flags,
 	return (true);
 }
 
-void				proceed_q_r_def(uint8_t flags,
+void				proceed_q_r_def(uint16_t flags,
 					t_container *hash,
 					t_hashtype htype,
 					char *txt)
@@ -56,7 +56,7 @@ void				proceed_q_r_def(uint8_t flags,
 	}
 }
 
-void				proceed_arg(uint8_t flags,
+void				hash_arg(uint16_t flags,
 					char *txt,
 					t_hashtype htype)
 {

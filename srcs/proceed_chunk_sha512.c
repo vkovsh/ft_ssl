@@ -26,11 +26,11 @@ static void		init_word_array(uint8_t *chunk,
 	i--;
 	while (++i < 80)
 	{
-		s0 = RROT(w[i - 15], 1, 64) ^
-			RROT(w[i - 15], 8, 64) ^
+		s0 = RROT(w[i - 15], 1) ^
+			RROT(w[i - 15], 8) ^
 			(w[i - 15] >> 7);
-		s1 = RROT(w[i - 2], 19, 64) ^
-			RROT(w[i - 2], 61, 64) ^
+		s1 = RROT(w[i - 2], 19) ^
+			RROT(w[i - 2], 61) ^
 			(w[i - 2] >> 6);
 		w[i] = w[i - 16] + s0 + w[i - 7] + s1;
 	}
@@ -62,13 +62,13 @@ static void		compression_loop(uint64_t *lvars,
 	i = -1;
 	while (++i < 80)
 	{
-		t[0] = RROT(lvars[H4], 14, 64) ^
-		RROT(lvars[H4], 18, 64) ^ RROT(lvars[H4], 41, 64);
+		t[0] = RROT(lvars[H4], 14) ^
+			RROT(lvars[H4], 18) ^ RROT(lvars[H4], 41);
 		t[1] = (lvars[H4] & lvars[H5]) ^ ((~lvars[H4]) & lvars[H6]);
 		t[2] = lvars[H7] +
-		t[0] + t[1] + g_kvars_sha512[i] + w[i];
-		t[3] = RROT(lvars[H0], 28, 64) ^
-		RROT(lvars[H0], 34, 64) ^ RROT(lvars[H0], 39, 64);
+			t[0] + t[1] + g_kvars_sha512[i] + w[i];
+		t[3] = RROT(lvars[H0], 28) ^
+			RROT(lvars[H0], 34) ^ RROT(lvars[H0], 39);
 		t[4] = (lvars[H0] & lvars[H1]) ^
 		(lvars[H0] & lvars[H2]) ^ (lvars[H1] & lvars[H2]);
 		t[5] = t[3] + t[4];

@@ -12,27 +12,27 @@
 
 #include "ft_ssl.h"
 
-t_hashtype			get_md_cmd(const char *str)
-{
-	char			*upper;
-	t_hashtype		htype;
+static const char *g_hash_cmd[HASH_TOTAL] = MD_TXT;
+static const char *g_cipher_cmd[CIPHER_TOTAL] = CIPHER_TXT;
+static const char **g_cmd[TOTAL_CMD] =
+	{g_hash_cmd, g_cipher_cmd};
 
-	htype = UNDEFINED;
+int				get_cmd(const char *str,
+				t_cmdtype cmdtype,
+				int total)
+{
+	char		*upper;
+	int			type;
+	const char	**cmd = g_cmd[cmdtype];
+
+	type = -1;
 	upper = ft_strtoupper(str);
-	if (!ft_strcmp(upper, "MD5"))
-		htype = HASH_MD_FIVE;
-	else if (!ft_strcmp(upper, "SHA256"))
-		htype = HASH_SHA256;
-	else if (!ft_strcmp(upper, "SHA224"))
-		htype = HASH_SHA224;
-	else if (!ft_strcmp(upper, "SHA512"))
-		htype = HASH_SHA512;
-	else if (!ft_strcmp(upper, "SHA384"))
-		htype = HASH_SHA384;
-	else if (!ft_strcmp(upper, "SHA512/256"))
-		htype = HASH_SHA512_256;
-	else if (!ft_strcmp(upper, "SHA512/224"))
-		htype = HASH_SHA512_224;
+	while (++type < total)
+		if (!ft_strcmp(upper, cmd[type]))
+		{
+			ft_strdel(&upper);
+			return (type);
+		}
 	ft_strdel(&upper);
-	return (htype);
+	return (-1);
 }

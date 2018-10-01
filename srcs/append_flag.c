@@ -32,10 +32,8 @@ uint8_t				append_flag(uint8_t flag,
 		{
 			j = -1;
 			while (++j < FLAG_SSL_TOTAL)
-			{
 				if (FLAGS_SSL[j] == str[i])
 					new_flag |= 1 << j;
-			}
 		}
 	}
 	return (new_flag);

@@ -21,18 +21,20 @@
 # define K_LEN 64
 # define S_LEN 64
 # define K_LEN_EXTENDED
-# define LROT(x, c, sz) (((x) << (c)) | ((x) >> (sz - (c))))
-# define RROT(x, c, sz) (((x) >> (c)) | ((x) << (sz - (c))))
+# define LROT(x,c) (((x)<<(c))|((x)>>((sizeof(x)<<3)-(c))))
+# define RROT(x,c) (((x)>>(c))|((x)<<((sizeof(x)<<3)-(c))))
 # define CHUNK_SIZES "\100\100\100\200\200\200\200"
 # define HASH_SIZES "\020\040\040\100\100\100\100"
 # define FLAG_P 1
 # define FLAG_Q 2
 # define FLAG_R 4
 # define FLAG_S 8
-# define FLAG_STDIN 32
 # define FLAG_I 16
-# define FLAGS_SSL "pqrsi"
-# define FLAG_SSL_TOTAL 5
+# define FLAG_E 32
+# define FLAG_D 64
+# define FLAG_STDIN 128
+# define FLAGS_SSL "pqrsied"
+# define FLAG_SSL_TOTAL 7
 # define PART_ONE "MD5","SHA256","SHA224","SHA512"
 # define MD_TXT {PART_ONE,"SHA384","SHA512/256","SHA512/224"}
 # define INV_OPT "%s '%c'\n", "ft_ssl: invalid option --"
@@ -43,6 +45,9 @@
 # define NUMBERS "0123456789"
 # define BASE64_TRANSFORM ALPHA_UPPER ALPHA_LOW NUMBERS "+/"
 # define CIPHER_TXT {"BASE64"}
+# define STDIN 0
+# define STDOUT 1
+# define STDERR 2
 
 extern uint32_t g_svars[S_LEN];
 extern uint32_t	g_kvars_md[K_LEN];
@@ -73,7 +78,7 @@ typedef enum		e_shavar
 
 typedef enum		e_hashtype
 {
-	UNDEFINED = -1,
+	HASH_UNDEFINED = -1,
 	HASH_MD_FIVE,
 	HASH_SHA256,
 	HASH_SHA224,
@@ -83,6 +88,20 @@ typedef enum		e_hashtype
 	HASH_SHA512_224,
 	HASH_TOTAL
 }					t_hashtype;
+
+typedef enum		e_ciphertype
+{
+	CIPHER_UNDEFINED = -1,
+	CIPHER_BASE64,
+	CIPHER_TOTAL
+}					t_ciphertype;
+
+typedef enum		e_cmdtype
+{
+	HASH_CMD,
+	CIPHER_CMD,
+	TOTAL_CMD
+}					t_cmdtype;
 
 typedef struct		s_container
 {
@@ -149,11 +168,13 @@ void				ft_print_sha512(t_container *hash);
 void				ft_print_sha384(t_container *hash);
 void				ft_print_sha512_256(t_container *hash);
 void				ft_print_sha512_224(t_container *hash);
-t_hashtype			get_md_cmd(const char *str);
+int					get_cmd(const char *str,
+					t_cmdtype cmdtype,
+					int total);
 uint8_t				append_flag(uint8_t flag,
 					const char *str);
 void				ft_info(const char *cmd);
-void				proceed_arg(uint8_t flags,
+void				hash_arg(uint16_t flags,
 					char *txt, t_hashtype htype);
 uint8_t				*get_file(const char *path,
 					size_t *size);

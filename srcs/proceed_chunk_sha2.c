@@ -26,11 +26,11 @@ static void		init_word_array(uint8_t *chunk,
 	i--;
 	while (++i < 64)
 	{
-		s0 = RROT(w[i - 15], 7, 32) ^
-			RROT(w[i - 15], 18, 32) ^
+		s0 = RROT(w[i - 15], 7) ^
+			RROT(w[i - 15], 18) ^
 			(w[i - 15] >> 3);
-		s1 = RROT(w[i - 2], 17, 32) ^
-			RROT(w[i - 2], 19, 32) ^
+		s1 = RROT(w[i - 2], 17) ^
+			RROT(w[i - 2], 19) ^
 			(w[i - 2] >> 10);
 		w[i] = w[i - 16] + s0 + w[i - 7] + s1;
 	}
@@ -62,12 +62,12 @@ static void		compression_loop(uint32_t *v,
 	i = -1;
 	while (++i < 64)
 	{
-		t[0] = RROT(v[H4], 6, 32) ^
-		RROT(v[H4], 11, 32) ^ RROT(v[H4], 25, 32);
+		t[0] = RROT(v[H4], 6) ^
+		RROT(v[H4], 11) ^ RROT(v[H4], 25);
 		t[1] = (v[H4] & v[H5]) ^ ((~v[H4]) & v[H6]);
 		t[2] = v[H7] + t[0] + t[1] + g_kvars_sha[i] + w[i];
-		t[3] = RROT(v[H0], 2, 32) ^
-		RROT(v[H0], 13, 32) ^ RROT(v[H0], 22, 32);
+		t[3] = RROT(v[H0], 2) ^
+			RROT(v[H0], 13) ^ RROT(v[H0], 22);
 		t[4] = (v[H0] & v[H1]) ^
 			(v[H0] & v[H2]) ^ (v[H1] & v[H2]);
 		t[5] = t[3] + t[4];
