@@ -102,6 +102,7 @@ void				proceed_args_for_hashing(const int ac,
 	while (i++ < ac)
 		hash_arg(flags, av[i - 1], cmd);
 }
+
 void				proceed_args_for_cipher(const int ac,
 					char **av, const int cmd)
 {
@@ -138,6 +139,12 @@ int					main(int ac, char **av)
 {
 	int				cmd;
 
+	char *pwd = get_pwd();
+	if (pwd == NULL)
+		exit(0);
+	ft_printf("%s\n", pwd);
+	ft_strdel(&pwd);
+	exit(1);
 	if (ac >= 2)
 	{
 		if ((cmd = get_cmd(av[1], HASH_CMD, HASH_TOTAL)) != -1)

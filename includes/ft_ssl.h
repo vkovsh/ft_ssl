@@ -14,15 +14,19 @@
 # define FT_SSL_H
 # include "ft_printf.h"
 # include <stdbool.h>
+# include <bsd/readpassphrase.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <sys/stat.h>
 # include <sys/types.h>
+# include <unistd.h>
 # define K_LEN 64
 # define S_LEN 64
 # define K_LEN_EXTENDED
-# define LROT(x,c) (((x)<<(c))|((x)>>((sizeof(x)<<3)-(c))))
-# define RROT(x,c) (((x)>>(c))|((x)<<((sizeof(x)<<3)-(c))))
+# define LROT(x,c)(((x)<<(c))|((x)>>((sizeof(x)<<3)-(c))))
+# define RROT(x,c)(((x)>>(c))|((x)<<((sizeof(x)<<3)-(c))))
+# define UNSET_BIT(x,n)((x&(1<<n))?(x^(1<<n)):x)
+# define SET_BIT(x,n) (x | (1 << n))
 # define CHUNK_SIZES "\100\100\100\200\200\200\200"
 # define HASH_SIZES "\020\040\040\100\100\100\100"
 # define FLAG_P 1
@@ -48,7 +52,7 @@
 # define ALPHA_LOW "abcdefghijklmnopqrstuvwxyz"
 # define NUMBERS "0123456789"
 # define BASE64_TRANSFORM ALPHA_UPPER ALPHA_LOW NUMBERS "+/"
-# define CIPHER_TXT {"BASE64"}
+# define CIPHER_TXT {"BASE64","DES"}
 # define STDIN 0
 # define STDOUT 1
 # define STDERR 2
@@ -97,6 +101,7 @@ typedef enum		e_ciphertype
 {
 	CIPHER_UNDEFINED = -1,
 	CIPHER_BASE64,
+	CIPHER_DES,
 	CIPHER_TOTAL
 }					t_ciphertype;
 
@@ -191,4 +196,6 @@ char				*encode_to_base64(const uint8_t *bin,
 uint8_t				*decode_from_base64(const char *code);
 void				print_base64_code(const int fd,
 					const char *code);
+char				*get_pwd(void);
+uint64_t			initial_shuffle(uint64_t block);
 #endif

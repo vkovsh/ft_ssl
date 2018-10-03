@@ -5,6 +5,7 @@ CC_FLAGS			=	-Wall -Werror -Wextra -g -o0
 
 SRC_PATH			=	./srcs/
 HASH_PATH			=	$(SRC_PATH)hash/
+CIPHER_PATH			=	$(SRC_PATH)cipher/
 
 INC_PATH			=	./includes/ $(LIBFTPRINTF_PATH)includes/ $(LIBFT_PATH)includes/
 OBJ_PATH			=	./obj/
@@ -17,6 +18,7 @@ INC					=	$(addprefix -I, $(INC_PATH))
 
 OBJ_NAME			=	$(SRC_NAME:.c=.o)
 OBJ_NAME			+=	$(HASH_NAME:.c=.o)
+OBJ_NAME			+=	$(CIPHER_NAME:.c=.o)
 
 HASH_NAME			=	utils.c					\
 						proceed_chunk_md5.c		\
@@ -33,25 +35,34 @@ SRC_NAME			=	main.c					\
 						get_msg_from_file.c		\
 						get_cmd.c				\
 						append_flag.c			\
-						encode_to_base64.c		\
+						
+CIPHER_NAME			=	encode_to_base64.c		\
 						decode_from_base64.c	\
-						print_base64_code.c
+						print_base64_code.c		\
+						get_pwd.c				\
+						initial_shuffle.c		\
+						des_cbc.c
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make -C $(LIBFTPRINTF_PATH)
-	@$(CC) -o $(NAME) $(OBJ) $(LIBFTPRINTF_PATH)libftprintf.a
+	@$(CC) -o $(NAME) $(OBJ) $(LIBFTPRINTF_PATH)libftprintf.a -lbsd
 	@echo "Compiling" [ $(NAME) ]
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@mkdir -p $(OBJ_PATH)
-	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC)
+	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC) #-lbsd
 	@echo "Linking" [ $< ]
 
 $(OBJ_PATH)%.o: $(HASH_PATH)%.c
 	@mkdir -p $(OBJ_PATH)
-	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC)
+	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC) #-lbsd
+	@echo "Linking" [ $< ]
+
+$(OBJ_PATH)%.o: $(CIPHER_PATH)%.c
+	@mkdir -p $(OBJ_PATH)
+	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC) #-lbsd
 	@echo "Linking" [ $< ]
 
 clean:
