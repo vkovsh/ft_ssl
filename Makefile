@@ -2,10 +2,13 @@ NAME				=	ft_ssl
 
 CC					=	gcc
 CC_FLAGS			=	-Wall -Werror -Wextra -g -o0
+ASM					=	nasm
+ASM_FLAGS			=	-f elf64
 
 SRC_PATH			=	./srcs/
 HASH_PATH			=	$(SRC_PATH)hash/
 CIPHER_PATH			=	$(SRC_PATH)cipher/
+ASM_PATH			=	$(SRC_PATH)asm/
 
 INC_PATH			=	./includes/ $(LIBFTPRINTF_PATH)includes/ $(LIBFT_PATH)includes/
 OBJ_PATH			=	./obj/
@@ -19,6 +22,9 @@ INC					=	$(addprefix -I, $(INC_PATH))
 OBJ_NAME			=	$(SRC_NAME:.c=.o)
 OBJ_NAME			+=	$(HASH_NAME:.c=.o)
 OBJ_NAME			+=	$(CIPHER_NAME:.c=.o)
+OBJ_NAME			+=	$(ASM_NAME:.asm=.o)
+
+ASM_NAME			=	set_bit.asm
 
 HASH_NAME			=	utils.c					\
 						proceed_chunk_md5.c		\
@@ -52,17 +58,22 @@ $(NAME): $(OBJ)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@mkdir -p $(OBJ_PATH)
-	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC) #-lbsd
+	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC)
 	@echo "Linking" [ $< ]
 
 $(OBJ_PATH)%.o: $(HASH_PATH)%.c
 	@mkdir -p $(OBJ_PATH)
-	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC) #-lbsd
+	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC)
 	@echo "Linking" [ $< ]
 
 $(OBJ_PATH)%.o: $(CIPHER_PATH)%.c
 	@mkdir -p $(OBJ_PATH)
-	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC) #-lbsd
+	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC)
+	@echo "Linking" [ $< ]
+
+$(OBJ_PATH)%.o: $(ASM_PATH)%.asm
+	@mkdir -p $(OBJ_PATH)
+	@$(ASM) $(ASM_FLAGS) -o $@ $< $(INC)
 	@echo "Linking" [ $< ]
 
 clean:

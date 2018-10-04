@@ -139,6 +139,7 @@ int					main(int ac, char **av)
 {
 	int				cmd;
 
+	initial_shuffle(1);
 	char *pwd = get_pwd();
 	if (pwd == NULL)
 		exit(0);
