@@ -25,8 +25,10 @@
 # define K_LEN_EXTENDED
 # define LROT(x,c)(((x)<<(c))|((x)>>((sizeof(x)<<3)-(c))))
 # define RROT(x,c)(((x)>>(c))|((x)<<((sizeof(x)<<3)-(c))))
-# define UNSET_BIT(x,n)((x&((typeof(x))1<<n))?(x^((typeof(x))1<<n)):x)
+# define ISSET_BIT(x,n)(((x)>>n)&1)
+# define UNSET_BIT(x,n)((ISSET_BIT(x,n))?(x^((typeof(x))1<<n)):x)
 # define SET_BIT(x,n)(x|((typeof(x))1<<n))
+# define INVERT_BIT(x,n)(x^((typeof(x))1<<n))
 # define CHUNK_SIZES "\100\100\100\200\200\200\200"
 # define HASH_SIZES "\020\040\040\100\100\100\100"
 # define FLAG_P 1
@@ -62,7 +64,8 @@ extern uint32_t	g_kvars_md[K_LEN];
 extern uint32_t	g_kvars_sha[K_LEN];
 extern uint64_t g_kvars_sha512[K_LEN_EXTENDED];
 
-uint64_t	_set_bit(int x, int n);
+uint64_t	_set_bit(uint64_t x, uint8_t n);
+uint8_t		_invert_bit(uint8_t byte, uint8_t n);
 
 typedef enum		e_mdvar
 {
@@ -200,4 +203,7 @@ void				print_base64_code(const int fd,
 					const char *code);
 char				*get_pwd(void);
 uint64_t			initial_shuffle(uint64_t block);
+uint64_t			swap_bits(uint64_t block,
+					int a, int b);
+uint32_t			f(uint32_t block, uint64_t key);
 #endif

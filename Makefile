@@ -24,7 +24,8 @@ OBJ_NAME			+=	$(HASH_NAME:.c=.o)
 OBJ_NAME			+=	$(CIPHER_NAME:.c=.o)
 OBJ_NAME			+=	$(ASM_NAME:.asm=.o)
 
-ASM_NAME			=	set_bit.asm
+ASM_NAME			=	set_bit.asm				\
+						invert_bit.asm
 
 HASH_NAME			=	utils.c					\
 						proceed_chunk_md5.c		\

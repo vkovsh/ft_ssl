@@ -6,14 +6,14 @@ static const uint8_t g_shuffle[64] = {
 57, 49, 41, 33, 25, 17, 9, 1, 59, 51, 43, 35, 27, 19, 11, 3,
 61, 53, 45, 37, 29, 21, 13, 5, 63, 55, 47, 39, 31, 23, 15, 7};
 
-static uint64_t	swap_bits(uint64_t block,
-				int a, int b)
+uint64_t	swap_bits(uint64_t block,
+			int a, int b)
 {
-	bool		is_a_set;
-	bool		is_b_set;
+	bool	is_a_set;
+	bool	is_b_set;
 
-	is_a_set = block & ((typeof(block))1 << a);
-	is_b_set = block & ((typeof(block))1 << b);
+	is_a_set = ISSET_BIT(block, a);
+	is_b_set = ISSET_BIT(block, b);
 	block = (is_a_set) ? SET_BIT(block, b) :
 					UNSET_BIT(block, b);
 	block = (is_b_set) ? SET_BIT(block, a) :
@@ -21,9 +21,9 @@ static uint64_t	swap_bits(uint64_t block,
 	return (block);
 }
 
-uint64_t		initial_shuffle(uint64_t block)
+uint64_t	initial_shuffle(uint64_t block)
 {
-	int			i;
+	int		i;
 
 	i = -1;
 	while (++i < 64)

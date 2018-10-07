@@ -139,6 +139,10 @@ int					main(int ac, char **av)
 {
 	int				cmd;
 
+	ft_printf("%d\n", _invert_bit(_invert_bit(1, 6), 0));
+	uint64_t a = 0;
+	for (int i = 0; i <= 63; ++i)
+		ft_printf("0x%.16llx\n", a = _set_bit(a, i));
 	initial_shuffle(1);
 	char *pwd = get_pwd();
 	if (pwd == NULL)
