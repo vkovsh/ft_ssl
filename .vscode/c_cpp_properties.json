@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/usr/include/",
+                "${workspaceFolder}/includes",
+                "${workspaceFolder}/libftprintf/includes",
+                "${workspaceFolder}/libftprintf/libft/includes"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang++-6.0",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
