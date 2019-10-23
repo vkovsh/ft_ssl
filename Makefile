@@ -55,7 +55,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make -C $(LIBFTPRINTF_PATH)
-	@$(CC) -o $(NAME) $(OBJ) $(LIBFTPRINTF_PATH)libftprintf.a -lbsd
+	@$(CC) -o $(NAME) $(OBJ) $(LIBFTPRINTF_PATH)libftprintf.a
 	@echo "Compiling" [ $(NAME) ]
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c

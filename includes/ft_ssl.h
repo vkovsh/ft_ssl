@@ -14,7 +14,6 @@
 # define FT_SSL_H
 # include "ft_printf.h"
 # include <stdbool.h>
-# include <bsd/readpassphrase.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <sys/stat.h>
@@ -58,6 +57,8 @@
 # define STDIN 0
 # define STDOUT 1
 # define STDERR 2
+
+typedef struct termios t_termios;
 
 extern uint32_t g_svars[S_LEN];
 extern uint32_t	g_kvars_md[K_LEN];
