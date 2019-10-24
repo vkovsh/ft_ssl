@@ -119,13 +119,13 @@ void				proceed_args_for_cipher(const int ac,
 	{
 		if (av[i][0] == '-')
 			flags = append_flag(flags, av[i]);
-		else if (flags & FLAG_I && !in)
+		else if (flags & FLAG_I && in == NULL)
 			in = av[i];
-		else if (flags & FLAG_O && !out)
+		else if (flags & FLAG_O && out == NULL)
 			out = av[i];
 	}
-	int read_fd = (in) ? open(in, O_RDONLY) : 0;
-	int write_fd = (out) ? open(out, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR) : 1;
+	int read_fd = (in != NULL) ? open(in, O_RDONLY) : 0;
+	int write_fd = (out != NULL) ? open(out, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR) : 1;
 	if (read_fd == -1 || write_fd == -1)
 		exit(1);
 	crypt_arg(read_fd, write_fd, flags, cmd);
@@ -139,17 +139,17 @@ int					main(int ac, char **av)
 {
 	int				cmd;
 
-	ft_printf("%d\n", _invert_bit(_invert_bit(1, 6), 0));
-	uint64_t a = 0;
-	for (int i = 0; i <= 63; ++i)
-		ft_printf("0x%.16llx\n", a = _set_bit(a, i));
-	initial_shuffle(1);
-	char *pwd = get_pwd();
-	if (pwd == NULL)
-		exit(0);
-	ft_printf("%s\n", pwd);
-	ft_strdel(&pwd);
-	exit(1);
+	// ft_printf("%d\n", _invert_bit(_invert_bit(1, 6), 0));
+	// uint64_t a = 0;
+	// for (int i = 0; i <= 63; ++i)
+	// 	ft_printf("0x%.16llx\n", a = _set_bit(a, i));
+	// initial_shuffle(1);
+	// char *pwd = get_pwd();
+	// if (pwd == NULL)
+	// 	exit(0);
+	// ft_printf("%s\n", pwd);
+	// ft_strdel(&pwd);
+	// exit(1);
 	if (ac >= 2)
 	{
 		if ((cmd = get_cmd(av[1], HASH_CMD, HASH_TOTAL)) != -1)
