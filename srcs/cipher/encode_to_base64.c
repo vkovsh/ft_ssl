@@ -5,10 +5,14 @@ static void		encode_trinity(char *code,
 				uint32_t trinity)
 {
 	int			i;
+	const char *base64_transform =
+			"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+			"abcdefghijklmnopqrstuvwxyz"
+			"0123456789+/";
 
 	i = 2;
 	while ((i += 6) <= 26)
-		code[++(*index)] = BASE64_TRANSFORM[(trinity << i) >> 26];
+		code[++(*index)] = base64_transform[(trinity << i) >> 26];
 }
 
 static uint32_t	init_trinity(const uint8_t a,

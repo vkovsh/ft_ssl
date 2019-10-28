@@ -22,7 +22,7 @@ uint8_t				*get_file(const char *path, size_t *size)
 	if (stat(path, &s) < 0 ||
 		(fd = open(path, O_RDONLY)) < 0)
 	{
-		ft_printf(NO_FILE, path);
+		ft_printf("'%s': No such file or directory\n", path);
 		return (NULL);
 	}
 	stream = ft_memalloc(s.st_size);
@@ -58,33 +58,6 @@ void				handle_input_for_hash(uint16_t flags,
 		hash_arg(flags, line, htype);
 		free(line);
 	}
-}
-
-void				crypt_arg(const int read_fd,
-					const int write_fd,
-					uint16_t flags,
-					t_hashtype htype)
-{
-	uint8_t			*binary;
-	char			*code;
-	char			buf[4096];
-
-	ft_bzero(buf, 4096);
-	if (htype == -1)
-		exit(1);
-	binary = (uint8_t *)get_stream(read_fd, buf, 4096);
-	if ((flags & FLAG_E) || !(flags & FLAG_D))
-	{
-		code = encode_to_base64(binary,	ft_strlen((char *)binary));
-		print_base64_code(write_fd, code);
-	}
-	else
-	{
-		code = (char *)decode_from_base64((char *)binary);
-		ft_dprintf(write_fd, "%s", code);
-	}
-	free(code);
-	free(binary);
 }
 
 void				proceed_args_for_hashing(const int ac,
@@ -160,6 +133,6 @@ int					main(int ac, char **av)
 			ft_info(av[1]);
 	}
 	else
-		ft_printf(USG);
+		ft_printf("ft_ssl command[command opts][command args]\n");
 	return (0);
 }

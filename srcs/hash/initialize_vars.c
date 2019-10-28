@@ -53,9 +53,12 @@ void *g_hash_defaults[HASH_TOTAL] = {
 	g_sha384_default, g_sha512_256_default,
 	g_sha512_224_default};
 
-void			initialize_vars(t_container *c)
+void				initialize_vars(t_container *c)
 {
-	c->vars = ft_memalloc(HASH_SIZES[c->hashtype]);
+	const uint8_t	hash_sizes[] =
+		{16, 32, 32, 64, 64, 64, 64};
+
+	c->vars = ft_memalloc(hash_sizes[c->hashtype]);
 	ft_memmove(c->vars, g_hash_defaults[c->hashtype],
-		HASH_SIZES[c->hashtype]);
+		hash_sizes[c->hashtype]);
 }

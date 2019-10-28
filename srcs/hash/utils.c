@@ -12,7 +12,7 @@
 
 #include "ft_ssl.h"
 
-uint32_t g_svars[S_LEN] = {
+uint32_t g_svars[64] = {
 	7, 12, 17, 22, 7, 12, 17, 22,
 	7, 12, 17, 22, 7, 12, 17, 22,
 	5, 9, 14, 20, 5, 9, 14, 20,
@@ -22,7 +22,7 @@ uint32_t g_svars[S_LEN] = {
 	6, 10, 15, 21, 6, 10, 15, 21,
 	6, 10, 15, 21, 6, 10, 15, 21};
 
-uint32_t g_kvars_md[K_LEN] = {
+uint32_t g_kvars_md[64] = {
 	0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
 	0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
 	0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
@@ -40,7 +40,7 @@ uint32_t g_kvars_md[K_LEN] = {
 	0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1,
 	0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391};
 
-uint32_t g_kvars_sha[K_LEN] = {
+uint32_t g_kvars_sha[64] = {
 	0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
 	0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
 	0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3,
@@ -58,7 +58,7 @@ uint32_t g_kvars_sha[K_LEN] = {
 	0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
 	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2};
 
-uint64_t g_kvars_sha512[K_LEN_EXTENDED] = {
+uint64_t g_kvars_sha512[80] = {
 	0x428a2f98d728ae22, 0x7137449123ef65cd,
 	0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc,
 	0x3956c25bf348b538, 0x59f111f1b605d019,

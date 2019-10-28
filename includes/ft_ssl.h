@@ -19,103 +19,85 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <unistd.h>
-# define K_LEN 64
-# define S_LEN 64
-# define K_LEN_EXTENDED
 # define LROT(x,c)(((x)<<(c))|((x)>>((sizeof(x)<<3)-(c))))
 # define RROT(x,c)(((x)>>(c))|((x)<<((sizeof(x)<<3)-(c))))
 # define ISSET_BIT(x,n)(((x)>>n)&1)
 # define UNSET_BIT(x,n)((ISSET_BIT(x,n))?(x^((typeof(x))1<<n)):x)
 # define SET_BIT(x,n)(x|((typeof(x))1<<n))
 # define INVERT_BIT(x,n)(x^((typeof(x))1<<n))
-# define CHUNK_SIZES "\100\100\100\200\200\200\200"
-# define HASH_SIZES "\020\040\040\100\100\100\100"
-# define FLAG_P 1
-# define FLAG_Q 2
-# define FLAG_R 4
-# define FLAG_S 8
-# define FLAG_I 16
-# define FLAG_O 32
-# define FLAG_E 64
-# define FLAG_D 128
-# define FLAG_A 256
-# define FLAG_K 512
-# define FLAG_V 1024
-# define FLAG_STDIN 2048
-# define FLAGS_SSL "pqrsioedakv"
+# define FLAG_P 0x1
+# define FLAG_Q 0x2
+# define FLAG_R 0x4
+# define FLAG_S 0x8
+# define FLAG_I 0x10
+# define FLAG_O 0x20
+# define FLAG_E 0x40
+# define FLAG_D 0x80
+# define FLAG_A 0x100
+# define FLAG_K 0x200
+# define FLAG_V 0x400
+# define FLAG_STDIN 0x800
 # define FLAG_SSL_TOTAL 11
-# define PART_ONE "MD5","SHA256","SHA224","SHA512"
-# define MD_TXT {PART_ONE,"SHA384","SHA512/256","SHA512/224"}
-# define INV_OPT "%s '%c'\n", "ft_ssl: invalid option --"
-# define NO_FILE "'%s': No such file or directory\n"
-# define USG "ft_ssl command[command opts][command args]\n"
-# define ALPHA_UPPER "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-# define ALPHA_LOW "abcdefghijklmnopqrstuvwxyz"
-# define NUMBERS "0123456789"
-# define BASE64_TRANSFORM ALPHA_UPPER ALPHA_LOW NUMBERS "+/"
-# define CIPHER_TXT {"BASE64","DES"}
-# define STDIN 0
-# define STDOUT 1
-# define STDERR 2
 
-typedef struct termios t_termios;
-
-extern uint32_t g_svars[S_LEN];
-extern uint32_t	g_kvars_md[K_LEN];
-extern uint32_t	g_kvars_sha[K_LEN];
-extern uint64_t g_kvars_sha512[K_LEN_EXTENDED];
-
-uint64_t	_set_bit(uint64_t x, uint8_t n);
-uint8_t		_invert_bit(uint8_t byte, uint8_t n);
+extern uint32_t g_svars[64];
+extern uint32_t	g_kvars_md[64];
+extern uint32_t	g_kvars_sha[64];
+extern uint64_t g_kvars_sha512[80];
 
 typedef enum		e_mdvar
 {
-	A_MD,
-	B_MD,
-	C_MD,
-	D_MD,
-	MD_VAR_TOTAL
+	A_MD = 0,
+	B_MD = 1,
+	C_MD = 2,
+	D_MD = 3,
+	MD_VAR_TOTAL = 4
 }					t_mdvar;
 
 typedef enum		e_shavar
 {
-	H0,
-	H1,
-	H2,
-	H3,
-	H4,
-	H5,
-	H6,
-	H7,
-	SHA_VAR_TOTAL
+	H0 = 0,
+	H1 = 1,
+	H2 = 2,
+	H3 = 3,
+	H4 = 4,
+	H5 = 5,
+	H6 = 6,
+	H7 = 7,
+	SHA_VAR_TOTAL = 8
 }					t_shavar;
 
 typedef enum		e_hashtype
 {
 	HASH_UNDEFINED = -1,
-	HASH_MD_FIVE,
-	HASH_SHA256,
-	HASH_SHA224,
-	HASH_SHA512,
-	HASH_SHA384,
-	HASH_SHA512_256,
-	HASH_SHA512_224,
-	HASH_TOTAL
+	HASH_MD_FIVE = 0,
+	HASH_SHA256 = 1,
+	HASH_SHA224 = 2,
+	HASH_SHA512 = 3,
+	HASH_SHA384 = 4,
+	HASH_SHA512_256 = 5,
+	HASH_SHA512_224 = 6,
+	HASH_TOTAL = 7
 }					t_hashtype;
+
+uint64_t	_set_bit(uint64_t x, uint8_t n);
+uint8_t		_invert_bit(uint8_t byte, uint8_t n);
+typedef struct termios t_termios;
 
 typedef enum		e_ciphertype
 {
 	CIPHER_UNDEFINED = -1,
-	CIPHER_BASE64,
-	CIPHER_DES,
-	CIPHER_TOTAL
+	CIPHER_BASE64 = 0,
+	CIPHER_DES_ECB = 1,
+	CIPHER_DES = 2,
+	CIPHER_DES_CBC = 3,
+	CIPHER_TOTAL = 4
 }					t_ciphertype;
 
 typedef enum		e_cmdtype
 {
-	HASH_CMD,
-	CIPHER_CMD,
-	TOTAL_CMD
+	HASH_CMD = 0,
+	CIPHER_CMD = 1,
+	TOTAL_CMD = 2
 }					t_cmdtype;
 
 typedef struct		s_container
@@ -193,6 +175,11 @@ void				hash_arg(uint16_t flags,
 					char *txt, t_hashtype htype);
 uint8_t				*get_file(const char *path,
 					size_t *size);
+
+void				crypt_arg(const int read_fd,
+					const int write_fd,
+					const uint16_t flags,
+					const t_ciphertype cipher_type);
 
 /*
 ** BASE64 encode and decode functions

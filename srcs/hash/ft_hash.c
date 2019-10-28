@@ -12,12 +12,14 @@
 
 #include "ft_ssl.h"
 
-t_container		ft_hash(uint8_t *msg,
-				size_t len,
-				t_hashtype htype)
+t_container			ft_hash(uint8_t *msg,
+					size_t len,
+					t_hashtype htype)
 {
-	t_container	c;
-	size_t		i;
+	t_container		c;
+	size_t			i;
+	const uint8_t	chunk_sizes[HASH_TOTAL] =
+				{64, 64, 64, 128, 128, 128, 128};
 
 	c.hashtype = htype;
 	initialize_vars(&c);
@@ -27,7 +29,7 @@ t_container		ft_hash(uint8_t *msg,
 	while (i < c.padded_msg_len)
 	{
 		g_chunkfuncs[c.hashtype](&c, c.padded_msg + i);
-		i += ((uint8_t *)CHUNK_SIZES)[c.hashtype];
+		i += chunk_sizes[c.hashtype];
 	}
 	return (c);
 }

@@ -34,8 +34,10 @@ void				proceed_q_r_def(uint16_t flags,
 					t_hashtype htype,
 					char *txt)
 {
-	const char		*mdtxt[HASH_TOTAL] = MD_TXT;
-
+	const char		*mdtxt[HASH_TOTAL] =
+			{"MD5","SHA256","SHA224","SHA512",
+			"SHA384","SHA512/256","SHA512/224"};
+	
 	if (flags & FLAG_Q)
 	{
 		ft_print_hash(hash);

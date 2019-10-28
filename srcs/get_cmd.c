@@ -12,10 +12,12 @@
 
 #include "ft_ssl.h"
 
-static const char *g_hash_cmd[HASH_TOTAL] = MD_TXT;
-static const char *g_cipher_cmd[CIPHER_TOTAL] = CIPHER_TXT;
-static const char **g_cmd[TOTAL_CMD] =
-	{g_hash_cmd, g_cipher_cmd};
+static const char *g_hash_cmd[HASH_TOTAL] =
+			{"MD5","SHA256","SHA224","SHA512",
+			"SHA384","SHA512/256","SHA512/224"};
+static const char *g_cipher_cmd[CIPHER_TOTAL] =
+			{"BASE64","DES","DES-ECB","DES-CBC"};
+static const char **g_cmd[TOTAL_CMD] = {g_hash_cmd, g_cipher_cmd};
 
 int				get_cmd(const char *str,
 				t_cmdtype cmdtype,

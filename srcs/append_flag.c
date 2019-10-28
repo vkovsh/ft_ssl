@@ -18,6 +18,7 @@ uint8_t				append_flag(uint8_t flag,
 	int				i;
 	int				j;
 	uint8_t			new_flag;
+	const char		flags_ssl[] = "pqrsioedakv";
 
 	i = 0;
 	new_flag = flag;
@@ -25,14 +26,14 @@ uint8_t				append_flag(uint8_t flag,
 	{
 		if (!ft_isalnum(str[i]))
 		{
-			ft_printf(INV_OPT, str[i]);
+			ft_printf("%s '%c'\n", "ft_ssl: invalid option --", str[i]);
 			exit(1);
 		}
 		else
 		{
 			j = -1;
 			while (++j < FLAG_SSL_TOTAL)
-				if (FLAGS_SSL[j] == str[i])
+				if (flags_ssl[j] == str[i])
 					new_flag |= 1 << j;
 		}
 	}

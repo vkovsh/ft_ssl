@@ -49,7 +49,8 @@ CIPHER_NAME			=	encode_to_base64.c		\
 						get_pwd.c				\
 						initial_shuffle.c		\
 						des_cbc.c				\
-						des_key.c
+						des_key.c				\
+						crypt_arg.c
 
 all: $(NAME)
 
